@@ -71,26 +71,16 @@ impl FileListing {
     }
 
     pub fn file_endpoint(&self, f: &File) -> String {
-        let mut lochash = PathBuf::from(get_location_hash());
-        lochash.push(f.name());
-        let lochash = lochash.to_string_lossy();
         match f.file_type() {
-            ref s if s == "directory" => {
-                let mut location = String::from("#");
-                location.push_str(&lochash);
-                location
-            },
+            ref s if s == "directory" => format!("#{}", f.endpoint()),
             _ => {
-                self.config.file_endpoint.replace("/<PATHNAME>", &lochash)
+                self.config.file_endpoint.replace("/<PATHNAME>", &f.endpoint())
             },
         }
     }
 
     pub fn thumbnail_endpoint(&self, f: &File) -> String {
-        let mut lochash = PathBuf::from(get_location_hash());
-        lochash.push(f.name());
-        let lochash = lochash.to_string_lossy();
-        self.config.thumbnailer.replace("/<PATHNAME>", &lochash)
+        self.config.thumbnailer.replace("/<PATHNAME>", &f.endpoint())
     }
 
     pub fn set_listing(&mut self, lst: &[File]) {
@@ -127,6 +117,13 @@ impl File {
             Some(ext) if is_image(ext.to_str().unwrap()) => "image".to_owned(),
             Some(_) => self.type_.clone(),
             None => "directory".to_owned(), 
+        }
+    }
+
+    pub fn endpoint(&self) -> String {
+        match get_location_hash() {
+            ref s if s == "/" => format!("{}{}", s, self.name()),
+            ref s => format!("{}/{}", s, self.name()),
         }
     }
 

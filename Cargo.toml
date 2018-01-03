@@ -1,0 +1,13 @@
+[package]
+name = "vywrs"
+version = "0.1.0"
+authors = ["Nurahmadie <nurahmadie@gmail.com>"]
+
+[dependencies]
+yew = { git = "https://github.com/DenisKolodin/yew" }
+stdweb = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+urlencoding = "*"
+bytesize = "*"

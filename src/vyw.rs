@@ -60,9 +60,7 @@ impl FileListing {
             .unwrap_or(Path::new("/"))
             .to_str()
             .unwrap();
-        let mut location = String::from("#");
-        location.push_str(lochash);
-        location
+        format!("#{}", lochash)
     }
 
     pub fn listing_endpoint(&self) -> String {

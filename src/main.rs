@@ -139,7 +139,7 @@ fn icon_view(fl: &FileListing, item: &File) -> Html<Msg> {
     }
 }
 
-fn navigation_bar(fl: &FileListing) -> Html<Msg> {
+fn navigation_bar(_fl: &FileListing) -> Html<Msg> {
     html! {
         <div class="navbar", >
             <a href="https://github.com/fudanchii/vywrs", >

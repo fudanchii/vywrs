@@ -141,17 +141,41 @@ fn icon_view(fl: &FileListing, item: &File) -> Html<Msg> {
     }
 }
 
+fn location_a_href(path: &str) -> Vec<Html<Msg>> {
+    let mut hrefs = Vec::new();
+    let arpath = path.split("/");
+    let mut count = 1;
+    for frp in arpath.clone() {
+        let cpath = arpath.clone()
+            .take(count)
+            .fold(String::new(), |s, c| match c {
+                e if e == "" => "".to_owned(),
+                _ => format!("{}/{}", s, c),
+            });
+        if cpath != "" {
+            hrefs.push(html! {
+                <span>{"/"}</span>
+                <a href=format!("#{}", cpath),>{ frp }</a>
+            });
+        }
+        count += 1;
+    }
+    hrefs
+}
+
 fn navigation_bar(_fl: &FileListing) -> Html<Msg> {
+    let fpath = decode(&get_location_hash()).unwrap();
     html! {
         <div class="navbar", >
             <a href="https://github.com/fudanchii/vywrs", >
                 <div class="navbar__logo", ></div>
             </a>
             <a href=FileListing::parent_dir_endpoint(), >
-                <div class="navbar__back", >{ "｡｡" }</div>
+                <div class="navbar__back", ></div>
             </a>
-            <div class="navbar__location", title=decode(&get_location_hash()).unwrap(), >
-                { decode(&get_location_hash()).unwrap() }
+            <div class="navbar__location", title=&fpath, >
+                <a class="navbar__location-home", href="#/", ></a>
+                { for location_a_href(&fpath).into_iter() }
             </div>
             <div class="navbar__viewmode", >
                 <div class="navbar__viewmode-thumbnail",

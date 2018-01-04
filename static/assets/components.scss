@@ -58,16 +58,24 @@
 .navbar__back {
     margin-left: 1rem;
     margin-top: 0;
-    padding-top: 0.37rem;
+    margin-right: 1rem;
+    font-size: 3rem;
+    &:before {
+        content: "\21A9";
+    }
 }
 
 .navbar__location {
-    padding-top: 0.37rem;
+    padding-top: 0.57rem;
     margin-top: 0;
     margin-left: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    &-home:before {
+        content: "\01F3E0";
+    }
 }
 
 .navbar__viewmode {
@@ -83,10 +91,10 @@
     }
 
     &-thumbnail {
-        padding-top: 0.37rem;
+        padding-top: 0.57rem;
         text-align: center;
         &::before {
-            content: "T";
+            content: "\01F3A8";
         }
         &:hover {
             background: #dadada;
@@ -94,10 +102,10 @@
         width: 2.2rem;
     }
     &-list {
-        padding-top: 0.37rem;
+        padding-top: 0.57rem;
         text-align: center;
         &::before {
-            content: "L";
+            content: "\01F4C3";
         }
         &:hover {
             background: #dadada;

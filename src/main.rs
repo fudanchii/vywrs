@@ -145,9 +145,9 @@ fn navigation_bar(_fl: &FileListing) -> Html<Msg> {
             <a href="https://github.com/fudanchii/vywrs", >
                 <div class="navbar__logo", ></div>
             </a>
-            <div class="navbar__back", >
-                <a href=FileListing::parent_dir_endpoint(), >{ "｡｡｡" }</a>
-            </div>
+            <a href=FileListing::parent_dir_endpoint(), >
+                <div class="navbar__back", >{ "｡｡" }</div>
+            </a>
             <div class="navbar__location", >{ decode(&get_location_hash()).unwrap() }</div>
             <div class="navbar__viewmode", >
                 <div class="navbar__viewmode-thumbnail",

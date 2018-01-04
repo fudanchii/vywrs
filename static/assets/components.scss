@@ -38,11 +38,12 @@
 
 .icon-directory,.icon-file {
     flex: none;
+    padding-top: 20%;
 }
 
 .navbar__logo {
     &::before {
-        content: "<vywrs/>";
+        content: "vywrs>";
     }
     margin: 0;
     padding-top: 0.37rem;
@@ -55,7 +56,7 @@
 }
 
 .navbar__back {
-    margin-left: 2rem;
+    margin-left: 1rem;
     margin-top: 0;
     padding-top: 0.37rem;
 }
@@ -63,7 +64,7 @@
 .navbar__location {
     padding-top: 0.37rem;
     margin-top: 0;
-    margin-left: 2rem;
+    margin-left: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

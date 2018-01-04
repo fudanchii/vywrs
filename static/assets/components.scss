@@ -116,6 +116,7 @@
     }
     &-filesize {
         max-width: 8rem;
+        min-width: 6rem;
         padding: 7px;
         white-space: nowrap;
         text-overflow: ellipsis;

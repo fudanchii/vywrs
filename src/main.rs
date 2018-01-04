@@ -70,11 +70,13 @@ fn row_view(fl: &FileListing, f: &File) -> Html<Msg> {
     html! {
         <div class="rows__item", >
             <div class="rows__item-filename", >
-                <a href=fl.file_endpoint(f), >{ decode(&f.name()).unwrap() }</a>
+                <a href=fl.file_endpoint(f), title=decode(&f.name()).unwrap(), >
+                    { decode(&f.name()).unwrap() }
+                </a>
             </div>
             <div class="rows__item-meta", >
-                <div class="rows__item-filesize", >{ f.size() }</div>
-                <div class="rows__item-filedate", >{ f.mtime() }</div>
+                <div class="rows__item-filesize", title=f.size(), >{ f.size() }</div>
+                <div class="rows__item-filedate", title=f.mtime(), >{ f.mtime() }</div>
             </div>
         </div>
     }
@@ -108,7 +110,7 @@ fn tile_view_html(fl: &FileListing, item: &File, tcl: &'static str, lcl: &'stati
             <a class=lcl, href=fl.file_endpoint(item), >
                 { icon_view(fl, item) }
                 <div class="tiles__label-wrapper", >
-                    <div class="tiles__label", >
+                    <div class="tiles__label", title=item.name(), >
                         { item.name() }
                     </div>
                 </div>
@@ -148,7 +150,9 @@ fn navigation_bar(_fl: &FileListing) -> Html<Msg> {
             <a href=FileListing::parent_dir_endpoint(), >
                 <div class="navbar__back", >{ "｡｡" }</div>
             </a>
-            <div class="navbar__location", >{ decode(&get_location_hash()).unwrap() }</div>
+            <div class="navbar__location", title=decode(&get_location_hash()).unwrap(), >
+                { decode(&get_location_hash()).unwrap() }
+            </div>
             <div class="navbar__viewmode", >
                 <div class="navbar__viewmode-thumbnail",
                      onclick=|_ev|Msg::ChangeMode(ViewMode::Thumbnail), ></div>

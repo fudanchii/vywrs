@@ -45,21 +45,19 @@
     &::before {
         content: "vywrs>";
     }
-    display: flex;
-    justify-content: center;
-    align-items: end;
     filter: drop-shadow(0px 2px 2px rgb(44, 33, 73));
     height: 100%;
     flex-shrink: 0;
     width: 6.5rem;
+    padding-top: 0.35rem;
+    text-align: center;
 }
 
 .navbar__back {
-    display: flex;
     height: 100%;
-    font-size: 3rem;
+    padding-top: 0.4rem;
     &:before {
-        content: "\21A9";
+        content: "[up]";
     }
 }
 
@@ -69,12 +67,9 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-
+    padding-top: 0.55rem;
     &-home:before {
-        content: "\01F408";
+        content: "\01F408[root]";
     }
 }
 
@@ -85,15 +80,13 @@
     margin-top: 0;
     margin-left: auto;
     display: flex;
+    padding-top: 0.55rem;
 
     &:hover {
         cursor: pointer;
     }
 
     &-thumbnail {
-        display: flex;
-        justify-content: center;
-        align-items: end;
         &::before {
             content: "\01F5BC";
         }
@@ -103,9 +96,6 @@
         width: 2.2rem;
     }
     &-list {
-        display: flex;
-        justify-content: center;
-        align-items: end;
         &::before {
             content: "\01F4C3";
         }

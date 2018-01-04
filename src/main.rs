@@ -178,10 +178,14 @@ fn navigation_bar(_fl: &FileListing) -> Html<Msg> {
                 { for location_a_href(&fpath).into_iter() }
             </div>
             <div class="navbar__viewmode", >
-                <div class="navbar__viewmode-thumbnail",
-                     onclick=|_ev|Msg::ChangeMode(ViewMode::Thumbnail), ></div>
-                <div class="navbar__viewmode-list",
-                     onclick=|_ev|Msg::ChangeMode(ViewMode::List), ></div>
+                <div class="navbar__viewmode-thumbnail-container", >
+                    <div class="navbar__viewmode-thumbnail",
+                         onclick=|_ev|Msg::ChangeMode(ViewMode::Thumbnail), ></div>
+                </div>
+                <div class="navbar__viewmode-list-container", >
+                    <div class="navbar__viewmode-list",
+                         onclick=|_ev|Msg::ChangeMode(ViewMode::List), ></div>
+                </div>
             </div>
         </div>
     }

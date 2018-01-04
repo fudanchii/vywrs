@@ -49,7 +49,7 @@
     height: 100%;
     flex-shrink: 0;
     width: 6.5rem;
-    padding-top: 0.35rem;
+    padding-top: 0.4rem;
     text-align: center;
 }
 
@@ -67,7 +67,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-top: 0.55rem;
+    padding-top: 0.4rem;
     &-home:before {
         content: "\01F408[root]";
     }
@@ -77,10 +77,8 @@
     flex-shrink: 0;
     flex-grow: 0;
     width: 4.4rem;
-    margin-top: 0;
     margin-left: auto;
     display: flex;
-    padding-top: 0.55rem;
 
     &:hover {
         cursor: pointer;
@@ -90,8 +88,11 @@
         &::before {
             content: "\01F5BC";
         }
-        &:hover {
-            background: #dadada;
+        &-container {
+            padding-top: 0.4rem;
+            &:hover {
+                background: #dadada;
+            }
         }
         width: 2.2rem;
     }
@@ -99,8 +100,11 @@
         &::before {
             content: "\01F4C3";
         }
-        &:hover {
-            background: #dadada;
+        &-container {
+            padding-top: 0.4rem;
+            &:hover {
+                background: #dadada;
+            }
         }
         width: 2.2rem;
     }

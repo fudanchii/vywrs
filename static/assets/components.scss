@@ -49,25 +49,21 @@
     height: 100%;
     flex-shrink: 0;
     width: 6.5rem;
-    padding-top: 0.25rem;
     text-align: center;
 }
 
 .navbar__back {
     height: 100%;
-    padding-top: 0.25rem;
     &:before {
         content: "[up]";
     }
 }
 
 .navbar__location {
-    margin-top: 0;
     margin-left: 0.4rem;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-top: 0.25rem;
     &-home:before {
         content: "\01F408[root]";
     }
@@ -89,7 +85,6 @@
             content: "\01F5BC";
         }
         &-container {
-            padding-top: 0.25rem;
             &:hover {
                 background: #dadada;
             }
@@ -101,7 +96,6 @@
             content: "\01F4C3";
         }
         &-container {
-            padding-top: 0.25rem;
             &:hover {
                 background: #dadada;
             }
@@ -112,7 +106,7 @@
 
 .rows__item {
     &-filename {
-        padding: 7px;
+        padding: 0.25rem;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -121,14 +115,14 @@
     &-filesize {
         max-width: 8rem;
         min-width: 6rem;
-        padding: 7px;
+        padding: 0.25rem;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
     &-filedate {
         max-width: 24rem;
-        padding: 7px;
+        padding: 0.25rem;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

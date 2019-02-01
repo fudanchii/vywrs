@@ -10,7 +10,7 @@ Vywrs config is identical to vyw, in addition vywrs now has list view mode in ad
 demo site
 ---
 
-https://vywrs.fudanchii.net
+https://vywrs.fudan.ch
 
 how to build
 ---

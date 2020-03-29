@@ -2,7 +2,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use yew::prelude::*;
 
-use crate::{VywrsMode, VywrsTheme, VywrsMessage};
+use crate::{VywrsMessage, VywrsMode, VywrsTheme};
 
 pub struct NavigationBar {
     link: ComponentLink<Self>,
@@ -54,7 +54,7 @@ impl Component for NavigationBar {
             VywrsMessage::ChangeTheme(theme) => {
                 self.props.theme_changer.emit(theme);
                 return theme != self.props.theme;
-            },
+            }
         }
 
         false
@@ -78,10 +78,18 @@ impl Component for NavigationBar {
             .to_string_lossy()
             .into_owned();
 
-        let into_thumbnail = self.link.callback(|_| VywrsMessage::ChangeMode(VywrsMode::Tile));
-        let into_list = self.link.callback(|_| VywrsMessage::ChangeMode(VywrsMode::List));
-        let use_dark_theme = self.link.callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Dark));
-        let use_light_theme = self.link.callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Light));
+        let into_thumbnail = self
+            .link
+            .callback(|_| VywrsMessage::ChangeMode(VywrsMode::Tile));
+        let into_list = self
+            .link
+            .callback(|_| VywrsMessage::ChangeMode(VywrsMode::List));
+        let use_dark_theme = self
+            .link
+            .callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Dark));
+        let use_light_theme = self
+            .link
+            .callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Light));
 
         html! {
             <div class=vec!["navbar", &self.props.theme]>

@@ -1,7 +1,7 @@
 use crate::{
     components::{MainView, NavigationBar},
     services::BodyClassSetter,
-    VywrsMode, VywrsTheme, VywrsMessage,
+    VywrsMessage, VywrsMode, VywrsTheme,
 };
 use std::path::PathBuf;
 use yew::prelude::*;

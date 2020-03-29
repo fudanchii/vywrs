@@ -408,10 +408,10 @@ name = "vywrs"
 version = "0.2.0"
 dependencies = [
  "bytesize",
- "js-sys",
  "serde",
  "serde_json",
  "wasm-bindgen",
+ "web-sys",
  "yew",
 ]
 

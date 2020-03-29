@@ -24,6 +24,7 @@ impl std::ops::Deref for VywrsTheme {
 }
 
 mod components;
+mod services;
 mod vywrs;
 
 use vywrs::Vywrs;

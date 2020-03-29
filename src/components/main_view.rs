@@ -1,9 +1,15 @@
+use crate::VywrsTheme;
 use yew::prelude::*;
 
 pub struct MainView;
 
+#[derive(Copy, Clone, Properties, PartialEq)]
+pub struct Props {
+    pub theme: VywrsTheme,
+}
+
 impl Component for MainView {
-    type Properties = ();
+    type Properties = Props;
     type Message = ();
 
     fn create(_: Self::Properties, _link: ComponentLink<Self>) -> Self {

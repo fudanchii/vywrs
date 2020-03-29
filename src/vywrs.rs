@@ -1,7 +1,7 @@
 use crate::{
     components::{MainView, NavigationBar},
     services::BodyClassSetter,
-    VywrsMode, VywrsTheme,
+    VywrsMode, VywrsTheme, VywrsMessage,
 };
 use std::path::PathBuf;
 use yew::prelude::*;
@@ -15,11 +15,6 @@ struct State {
     path: PathBuf,
     theme: VywrsTheme,
     mode: VywrsMode,
-}
-
-pub enum VywrsMessage {
-    ChangeMode(VywrsMode),
-    ChangeTheme(VywrsTheme),
 }
 
 impl Component for Vywrs {

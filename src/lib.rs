@@ -12,6 +12,11 @@ pub enum VywrsTheme {
     Light,
 }
 
+pub enum VywrsMessage {
+    ChangeMode(VywrsMode),
+    ChangeTheme(VywrsTheme),
+}
+
 impl std::ops::Deref for VywrsTheme {
     type Target = str;
 

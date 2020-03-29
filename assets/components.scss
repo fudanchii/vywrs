@@ -41,6 +41,112 @@
     padding-top: 20%;
 }
 
+.navbar__menu {
+    margin-left: auto;
+    width: 2rem;
+
+    > div {
+        display: none;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        > div {
+            display: block;
+        }
+    }
+
+    &--about {
+        color: $gray-1;
+    }
+
+    &--icon {
+        &::before {
+            content: "\01F39B";
+            margin-right: 0.5rem;
+        }
+    }
+
+    &--content {
+        position: absolute;
+        padding: 0.4rem;
+        z-index: 2;
+        font-size: 1rem;
+        top: 2.8rem;
+        right: 0;
+        &.dark {
+            background: $dark-2-rgb;
+        }
+        &.light {
+            background: $gray-2;
+        }
+    }
+
+    &--viewmode {
+        display: flex;
+        &--thumbnail {
+            margin-left: auto;
+            text-align: center;
+            width: 35%;
+
+            &:hover {
+                background: $highlight-1;
+            }
+
+            &::before {
+                content: "\01F4F8";
+            }
+        }
+
+        &--list {
+            margin-left: auto;
+            text-align: center;
+            width: 35%;
+
+            &:hover {
+                background: $highlight-1;
+            }
+
+            &::before {
+                content: "\01F4DC";
+            }
+        }
+    }
+
+    &--theme {
+        display: flex;
+        &--dark {
+            margin-left: auto;
+            text-align: center;
+            width: 35%;
+
+            &:hover {
+                background: $highlight-1;
+            }
+
+            &::before {
+                content: "\01F30C";
+            }
+        }
+
+        &--light {
+            margin-left: auto;
+            text-align: center;
+            width: 35%;
+
+            &:hover {
+                background: $highlight-1;
+            }
+
+            &::before {
+                content: "\01F324";
+            }
+
+        }
+    }
+}
+
 .navbar__logo {
     &::before {
         content: "vywrs>";
@@ -54,7 +160,7 @@
 
 .navbar__back {
     height: 100%;
-    &:before {
+    &::before {
         content: "[up]";
     }
 }

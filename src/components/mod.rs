@@ -1,5 +1,7 @@
-mod main_view;
+mod list_view;
 mod navigation_bar;
+mod tile_view;
 
-pub use main_view::MainView;
+pub use list_view::ListView;
 pub use navigation_bar::NavigationBar;
+pub use tile_view::TileView;

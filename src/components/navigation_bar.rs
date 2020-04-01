@@ -2,6 +2,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use yew::prelude::*;
 
+use crate::neq_assign::NeqAssign;
 use crate::{VywrsMessage, VywrsMode, VywrsTheme};
 
 pub struct NavigationBar {
@@ -61,12 +62,7 @@ impl Component for NavigationBar {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        if self.props != props {
-            self.props = props;
-            return true;
-        }
-
-        false
+        self.props.neq_assign(props)
     }
 
     fn view(&self) -> Html {

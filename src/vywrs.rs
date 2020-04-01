@@ -1,20 +1,45 @@
 use crate::{
-    components::{MainView, NavigationBar},
-    services::BodyClassSetter,
+    components::{ListView, NavigationBar, TileView},
+    listing::File,
+    services::{BodyClassSetter, Config},
     VywrsMessage, VywrsMode, VywrsTheme,
 };
 use std::path::PathBuf;
+use std::rc::Rc;
 use yew::prelude::*;
 
 pub struct Vywrs {
     link: ComponentLink<Self>,
     state: State,
+    config: Rc<Config>,
 }
 
 struct State {
     path: PathBuf,
     theme: VywrsTheme,
     mode: VywrsMode,
+    listing: Rc<Vec<File>>,
+}
+
+impl Vywrs {
+    fn main_view(&self) -> Html {
+        match self.state.mode {
+            VywrsMode::List => html! {
+                <ListView
+                    theme=self.state.theme
+                    listing=self.state.listing.clone()
+                    path=self.state.path.clone()
+                    config=self.config.clone() />
+            },
+            VywrsMode::Tile => html! {
+                <TileView
+                    theme=self.state.theme
+                    listing=self.state.listing.clone()
+                    path=self.state.path.clone()
+                    config=self.config.clone() />
+            },
+        }
+    }
 }
 
 impl Component for Vywrs {
@@ -26,9 +51,17 @@ impl Component for Vywrs {
             path: PathBuf::from("/"),
             mode: VywrsMode::Tile,
             theme: VywrsTheme::Dark,
+            listing: Rc::new(vec![]),
         };
 
-        Vywrs { link, state }
+        let config = Config::new().unwrap(); // 💣
+        let config = Rc::new(config);
+
+        Vywrs {
+            config,
+            link,
+            state,
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -63,7 +96,7 @@ impl Component for Vywrs {
                     theme=self.state.theme
                     layout_changer=layout_change_callback
                     theme_changer=theme_change_callback />
-                <MainView theme=self.state.theme />
+                { self.main_view() }
             </>
         }
     }

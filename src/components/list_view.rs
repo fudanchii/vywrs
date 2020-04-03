@@ -1,6 +1,5 @@
-use crate::{listing::File, neq_assign::NeqAssign, services::Config, VywrsTheme};
+use crate::{listing::File, neq_assign::NeqAssign, services::Config, vywrs::VywrsTheme};
 use std::borrow::Borrow;
-use std::path::PathBuf;
 use std::rc::Rc;
 use yew::prelude::*;
 
@@ -12,7 +11,7 @@ pub struct ListView {
 pub struct Props {
     pub listing: Rc<Vec<File>>,
     pub theme: VywrsTheme,
-    pub path: PathBuf,
+    pub path: String,
     pub config: Rc<Config>,
 }
 
@@ -21,7 +20,7 @@ impl ListView {
         html! {
             <div class="rows__item">
                 <div class="rows__item-filename">
-                    <a href=file.location(self.props.path.clone()) title=file.name()>
+                    <a href=file.location(&self.props.path) title=file.name()>
                         { file.name() }
                     </a>
                 </div>

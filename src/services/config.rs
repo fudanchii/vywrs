@@ -1,5 +1,4 @@
 use js_sys::{Array, JsString, Object, Reflect};
-use std::path::PathBuf;
 use web_sys::window;
 
 const LE_DEFAULT: &str = "http://localhost/listing/<PATHNAME>";
@@ -60,15 +59,26 @@ impl Config {
             )
     }
 
-    pub fn list_endpoint(&self, path: PathBuf, name: &str) -> &str {
-        &self.list_endpoint
+    fn url_encode(url: &str) -> String {
+        js_sys::encode_uri(url).into()
     }
 
-    pub fn file_endpoint(&self, path: PathBuf, name: &str) -> &str {
+    pub fn list_endpoint(&self, path: &str, name: &str) -> String {
+        let mut path = String::from(path); 
+        path.push('/');
+        path.push_str(name);
+        Config::url_encode(
+            &self
+                .list_endpoint
+                .replace("/<PATHNAME>", &path),
+        )
+    }
+
+    pub fn file_endpoint(&self, path: &str, name: &str) -> &str {
         &self.file_endpoint
     }
 
-    pub fn thumbnailer(&self, path: PathBuf, name: &str) -> &str {
+    pub fn thumbnailer(&self, path: &str, name: &str) -> &str {
         &self.thumbnailer
     }
 

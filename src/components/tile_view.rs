@@ -2,10 +2,9 @@ use crate::{
     listing::{File, FileType},
     neq_assign::NeqAssign,
     services::Config,
-    VywrsTheme,
+    vywrs::VywrsTheme,
 };
 use std::borrow::Borrow;
-use std::path::PathBuf;
 use std::rc::Rc;
 use yew::prelude::*;
 
@@ -17,7 +16,7 @@ pub struct TileView {
 pub struct Props {
     pub listing: Rc<Vec<File>>,
     pub theme: VywrsTheme,
-    pub path: PathBuf,
+    pub path: String,
     pub config: Rc<Config>,
 }
 
@@ -47,17 +46,17 @@ impl TileView {
             FileType::Directory => tile! {
                 "tiles__directory",
                 "tiles__directory-link",
-                file.location(self.props.path.clone()),
+                file.location(&self.props.path),
             },
             FileType::File => tile! {
                 "tiles__file",
                 "tiles__file-link",
-                config.file_endpoint(self.props.path.clone(), &file.name()),
+                config.file_endpoint(&self.props.path, &file.name()),
             },
             FileType::Image => tile! {
                 "tiles__image",
                 "tiles__image-link",
-                config.file_endpoint(self.props.path.clone(), &file.name()),
+                config.file_endpoint(&self.props.path, &file.name()),
             },
         }
     }
@@ -77,7 +76,7 @@ impl TileView {
         let config: &Config = self.props.config.borrow();
         format!(
             "backgroud-image: url(\"{}\")",
-            config.thumbnailer(self.props.path.clone(), name)
+            config.thumbnailer(&self.props.path, name)
         )
     }
 }

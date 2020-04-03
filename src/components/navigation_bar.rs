@@ -1,9 +1,8 @@
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
 use yew::prelude::*;
-
 use crate::neq_assign::NeqAssign;
-use crate::{VywrsMessage, VywrsMode, VywrsTheme};
+use crate::vywrs::{VywrsMessage, VywrsMode, VywrsTheme};
+
+use std::path::Path;
 
 pub struct NavigationBar {
     link: ComponentLink<Self>,
@@ -12,31 +11,30 @@ pub struct NavigationBar {
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
-    pub path: PathBuf,
+    pub path: String,
     pub theme: VywrsTheme,
     pub layout_changer: Callback<VywrsMode>,
     pub theme_changer: Callback<VywrsTheme>,
 }
 
 impl NavigationBar {
-    fn directory_link(path: &PathBuf) -> Html {
+    fn directory_link<T: Into<String>>(path: T) -> Html {
+        let path: String = path.into();
         html! {
             <>
                 <span>{"/"}</span>
-                <a href=format!("#{}", path.to_string_lossy())>
-                    { path.file_name().unwrap_or_else(|| OsStr::new("/")).to_string_lossy() }
+                <a href=&*path>
+                    { path.split('/').rev().take(1).collect::<Vec<&str>>()[0] }
                 </a>
             </>
         }
     }
 
-    fn directories(path: &Path) -> Vec<PathBuf> {
-        path.ancestors()
-            .collect::<Vec<&Path>>()
-            .iter()
-            .rev()
-            .skip(1)
-            .map(|fragment| fragment.to_path_buf())
+    fn directories(path: &str) -> Vec<String> {
+        path
+            .split('/')
+            .filter(|s| s != &"")
+            .map(|fragment| fragment.to_string())
             .collect()
     }
 }
@@ -56,6 +54,8 @@ impl Component for NavigationBar {
                 self.props.theme_changer.emit(theme);
                 return theme != self.props.theme;
             }
+            VywrsMessage::UpdateListing(_) => {}
+            VywrsMessage::FetchFailed => {}
         }
 
         false
@@ -66,13 +66,10 @@ impl Component for NavigationBar {
     }
 
     fn view(&self) -> Html {
-        let back_href = self
-            .props
-            .path
+        let back_href = Path::new(&self.props.path)
             .parent()
-            .unwrap_or(Path::new("#/"))
-            .to_string_lossy()
-            .into_owned();
+            .map(|dirname| dirname.to_string_lossy().to_string())
+            .unwrap_or("#/".to_string());
 
         let into_thumbnail = self
             .link
@@ -91,7 +88,7 @@ impl Component for NavigationBar {
             <div class=vec!["navbar", &self.props.theme]>
                 <a class="navbar__logo" href="https://github.com/fudanchii/vywrs" />
                 <a class="navbar__back" href=back_href />
-                <div class="navbar__location" title=self.props.path.to_string_lossy()>
+                <div class="navbar__location" title=self.props.path>
                     <a class="navbar__location-home" href="#/" />
                     { for Self::directories(&self.props.path).iter().map(Self::directory_link) }
                 </div>

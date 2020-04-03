@@ -1,6 +1,6 @@
 use bytesize::ByteSize;
 use serde::Deserialize;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub struct File {
@@ -33,10 +33,11 @@ impl File {
         self.mtime.clone()
     }
 
-    pub fn location(&self, path: PathBuf) -> String {
-        let mut path = path;
-        path.push(self.name());
-        path.to_string_lossy().into_owned()
+    pub fn location(&self, path: &str) -> String {
+        let mut path = String::from(path);
+        path.push('/');
+        path.push_str(&self.name());
+        path
     }
 
     pub fn file_type(&self) -> FileType {

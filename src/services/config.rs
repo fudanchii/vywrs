@@ -77,7 +77,11 @@ impl Config {
     }
 
     pub fn directory_endpoint(&self, path: &str, name: &str) -> String {
-        format!("#{}/{}", path, name)
+        let mut endpoint = String::from("#");
+        endpoint.push_str(path);
+        endpoint.push('/');
+        endpoint.push_str(name);
+        endpoint
     }
 
     pub fn file_endpoint(&self, path: &str, name: &str) -> String {

@@ -24,19 +24,19 @@ impl ListView {
     fn row_view(&self, file: &File) -> Html {
         html! {
             <div class="rows__item">
-                <div class="rows__item-filename">
-                    <a href=self.location(file) title=file.name()>
+                <a href=self.location(file) title=file.name()>
+                    <div class="rows__item-filename">
                         { file.name() }
-                    </a>
-                </div>
-                <div class="rows__item-meta">
-                    <div class="rows__item-filesize" title=file.size()>
-                        { file.size() }
                     </div>
-                    <div class="rows__item-filedate" title=file.mtime()>
-                        { file.mtime() }
+                    <div class="rows__item-meta">
+                        <div class="rows__item-filesize" title=file.size()>
+                            { file.size() }
+                        </div>
+                        <div class="rows__item-filedate" title=file.mtime()>
+                            { file.mtime() }
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         }
     }

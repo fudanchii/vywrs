@@ -1,11 +1,6 @@
 use js_sys::{Array, JsString, Object, Reflect};
 use web_sys::window;
 
-const LE_DEFAULT: &str = "http://localhost/listing/<PATHNAME>";
-const FE_DEFAULT: &str = "http://localhost/file/<PATHNAME>";
-const TE_DEFAULT: &str = "http://localhost/thumbnail/<PATHNAME>";
-const MAX_DEFAULT: &str = "100M";
-
 macro_rules! path {
     ($p:ident) => {
         if $p == "" {
@@ -33,10 +28,10 @@ impl Config {
             .ok_or("Cannot invoke vyw object")?;
 
         Ok(Config {
-            list_endpoint: Config::field_get_string(&vyw, "listEndpoint", LE_DEFAULT),
-            file_endpoint: Config::field_get_string(&vyw, "fileEndpoint", FE_DEFAULT),
-            thumbnailer: Config::field_get_string(&vyw, "thumbnailer", TE_DEFAULT),
-            max_size: Config::field_get_string(&vyw, "maxSize", MAX_DEFAULT),
+            list_endpoint: Config::field_get_string(&vyw, "listEndpoint"),
+            file_endpoint: Config::field_get_string(&vyw, "fileEndpoint"),
+            thumbnailer: Config::field_get_string(&vyw, "thumbnailer"),
+            max_size: Config::field_get_string(&vyw, "maxSize"),
             supported_image_type: Config::field_get_vec_string(
                 &vyw,
                 "supportedImageType",
@@ -45,11 +40,11 @@ impl Config {
         })
     }
 
-    fn field_get_string(vyw: &Object, key: &str, default: &str) -> String {
+    fn field_get_string(vyw: &Object, key: &str) -> String {
         Reflect::get(vyw, &JsString::from(key))
             .ok()
             .and_then(|val| val.as_string())
-            .unwrap_or_else(|| default.to_string())
+            .unwrap()
     }
 
     fn field_get_vec_string(vyw: &Object, key: &str, default: Vec<&str>) -> Vec<String> {

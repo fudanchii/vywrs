@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
       ]),
       new WasmPackPlugin({
         crateDirectory: './',
-        extraArgs: `--no-typescript --release ${features || ''}`,
+        extraArgs: `--no-typescript ${features || ''}`,
       }),
       new MiniCssExtractPlugin({ filename: "style.css" })
     ],

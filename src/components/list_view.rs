@@ -1,4 +1,9 @@
-use crate::{listing::File, neq_assign::NeqAssign, services::Config, vywrs::VywrsTheme};
+use crate::{
+    listing::{File, FileType},
+    neq_assign::NeqAssign,
+    services::Config,
+    vywrs::VywrsTheme,
+};
 use std::borrow::Borrow;
 use std::rc::Rc;
 use yew::prelude::*;
@@ -20,7 +25,7 @@ impl ListView {
         html! {
             <div class="rows__item">
                 <div class="rows__item-filename">
-                    <a href=file.location(&self.props.path) title=file.name()>
+                    <a href=self.location(file) title=file.name()>
                         { file.name() }
                     </a>
                 </div>
@@ -33,6 +38,14 @@ impl ListView {
                     </div>
                 </div>
             </div>
+        }
+    }
+
+    fn location(&self, file: &File) -> String {
+        let config: &Config = self.props.config.borrow();
+        match file.file_type() {
+            FileType::Directory => config.directory_endpoint(&self.props.path, &file.name()),
+            _ => config.file_endpoint(&self.props.path, &file.name()),
         }
     }
 }

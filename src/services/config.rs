@@ -6,6 +6,16 @@ const FE_DEFAULT: &str = "http://localhost/file/<PATHNAME>";
 const TE_DEFAULT: &str = "http://localhost/thumbnail/<PATHNAME>";
 const MAX_DEFAULT: &str = "100M";
 
+macro_rules! path {
+    ($p:ident) => {
+        if $p == "" {
+            "/"
+        } else {
+            &$p
+        }
+    };
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Config {
     list_endpoint: String,
@@ -39,7 +49,7 @@ impl Config {
         Reflect::get(vyw, &JsString::from(key))
             .ok()
             .and_then(|val| val.as_string())
-            .unwrap_or(default.to_string())
+            .unwrap_or_else(|| default.to_string())
     }
 
     fn field_get_vec_string(vyw: &Object, key: &str, default: Vec<&str>) -> Vec<String> {
@@ -48,45 +58,44 @@ impl Config {
             .map(|val| Array::from(&val).to_vec())
             .map(|val| {
                 val.iter()
-                    .map(|elt| elt.as_string().unwrap_or("".to_string()))
+                    .map(|elt| elt.as_string().unwrap_or_else(|| "".to_string()))
                     .collect::<Vec<String>>()
             })
-            .unwrap_or(
+            .unwrap_or_else(|| {
                 default
                     .iter()
-                    .map(|elt| elt.to_string())
-                    .collect::<Vec<_>>(),
-            )
+                    .map(|elt| (*elt).to_string())
+                    .collect::<Vec<_>>()
+            })
     }
 
-    fn url_encode(url: &str) -> String {
+    pub fn url_decode(url: &str) -> String {
+        js_sys::decode_uri(url).unwrap().into()
+    }
+
+    pub fn url_encode(url: &str) -> String {
         js_sys::encode_uri(url).into()
     }
 
-    pub fn list_endpoint(&self, path: &str, name: &str) -> String {
-        let mut path = String::from(path); 
+    pub fn list_endpoint(&self, path: &str) -> String {
+        Config::url_encode(&self.list_endpoint.replace("/<PATHNAME>", path!(path)))
+    }
+
+    pub fn directory_endpoint(&self, path: &str, name: &str) -> String {
+        format!("#{}/{}", path, name)
+    }
+
+    pub fn file_endpoint(&self, path: &str, name: &str) -> String {
+        let mut path = String::from(path);
         path.push('/');
         path.push_str(name);
-        Config::url_encode(
-            &self
-                .list_endpoint
-                .replace("/<PATHNAME>", &path),
-        )
+        Config::url_encode(&self.file_endpoint.replace("/<PATHNAME>", path!(path)))
     }
 
-    pub fn file_endpoint(&self, path: &str, name: &str) -> &str {
-        &self.file_endpoint
-    }
-
-    pub fn thumbnailer(&self, path: &str, name: &str) -> &str {
-        &self.thumbnailer
-    }
-
-    pub fn max_size(&self) -> &str {
-        &self.max_size
-    }
-
-    pub fn supported_image_type(&self) -> &Vec<String> {
-        &self.supported_image_type
+    pub fn thumbnailer(&self, path: &str, name: &str) -> String {
+        let mut path = String::from(path);
+        path.push('/');
+        path.push_str(name);
+        Config::url_encode(&self.thumbnailer.replace("/<PATHNAME>", path!(path)))
     }
 }

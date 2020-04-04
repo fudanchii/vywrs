@@ -22,7 +22,7 @@ impl File {
     pub fn name(&self) -> String {
         js_sys::decode_uri_component(&self.name)
             .map(|jsstring| jsstring.into())
-            .unwrap_or(self.name.clone())
+            .unwrap_or_else(|_| self.name.clone())
     }
 
     pub fn size(&self) -> String {
@@ -31,13 +31,6 @@ impl File {
 
     pub fn mtime(&self) -> String {
         self.mtime.clone()
-    }
-
-    pub fn location(&self, path: &str) -> String {
-        let mut path = String::from(path);
-        path.push('/');
-        path.push_str(&self.name());
-        path
     }
 
     pub fn file_type(&self) -> FileType {

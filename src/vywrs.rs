@@ -1,5 +1,3 @@
-use crate::listing::File;
-
 #[derive(Copy, Clone, PartialEq)]
 pub enum VywrsMode {
     List,
@@ -10,13 +8,6 @@ pub enum VywrsMode {
 pub enum VywrsTheme {
     Dark,
     Light,
-}
-
-pub enum VywrsMessage {
-    ChangeMode(VywrsMode),
-    ChangeTheme(VywrsTheme),
-    UpdateListing(Vec<File>),
-    FetchFailed,
 }
 
 impl std::ops::Deref for VywrsTheme {

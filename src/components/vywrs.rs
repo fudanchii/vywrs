@@ -2,20 +2,22 @@ use crate::{
     components::{ListView, NavigationBar, TileView},
     listing::File,
     services::{BodyClassSetter, Config},
-    vywrs::{VywrsMessage, VywrsMode, VywrsTheme},
+    vywrs::{VywrsMode, VywrsTheme},
 };
 use anyhow::Error;
 use std::rc::Rc;
 use yew::format::{Json, Nothing};
 use yew::prelude::*;
 use yew::services::fetch::{FetchService, FetchTask, Request, Response};
+use yew_router::prelude::RouteService;
 
 pub struct Vywrs {
     link: ComponentLink<Self>,
     state: State,
     config: Rc<Config>,
     fs: FetchService,
-    fetch_task: FetchTask,
+    fetch_task: Option<FetchTask>,
+    rs: RouteService<()>,
 }
 
 struct State {
@@ -23,6 +25,14 @@ struct State {
     theme: VywrsTheme,
     mode: VywrsMode,
     listing: Rc<Vec<File>>,
+}
+
+pub enum VywrsMessage {
+    ChangeMode(VywrsMode),
+    ChangeTheme(VywrsTheme),
+    UpdateListing(Vec<File>),
+    FetchListing,
+    FetchFailed,
 }
 
 impl Vywrs {
@@ -44,6 +54,43 @@ impl Vywrs {
             },
         }
     }
+
+    fn fetch_listing(&mut self, endpoint: &str) -> Result<(), Error> {
+        self.fetch_task = Some(
+            self.fs.fetch::<Nothing, Json<Result<Vec<File>, Error>>>(
+                Request::get(endpoint).body(Nothing).expect(endpoint),
+                self.link
+                    .callback(|response: Response<Json<Result<Vec<File>, Error>>>| {
+                        let (meta, Json(data)) = response.into_parts();
+                        if meta.status.is_success() {
+                            return VywrsMessage::UpdateListing(data.unwrap());
+                        }
+                        VywrsMessage::FetchFailed
+                    }),
+            )?,
+        );
+        Ok(())
+    }
+
+    fn setup_routing(&mut self) {
+        self.rs
+            .register_callback(self.link.callback(|_| VywrsMessage::FetchListing));
+    }
+
+    fn do_fetch_listing(&mut self) -> bool {
+        let hashloc = self.rs.get_fragment();
+        let hashloc = Config::url_decode(&hashloc.trim_start_matches('#'));
+        let endpoint = self.config.list_endpoint(&hashloc);
+        self.fetch_listing(&endpoint).unwrap();
+        self.state.path = hashloc;
+        false
+    }
+
+    fn do_update_listing(&mut self, new_listing: Vec<File>) -> bool {
+        let prev = self.state.listing.clone();
+        self.state.listing = Rc::new(new_listing);
+        prev != self.state.listing
+    }
 }
 
 impl Component for Vywrs {
@@ -52,39 +99,30 @@ impl Component for Vywrs {
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         let state = State {
-            path: String::from("/"),
+            path: String::from(""),
             mode: VywrsMode::Tile,
             theme: VywrsTheme::Dark,
             listing: Rc::new(vec![]),
         };
 
-        let config = Config::new().unwrap(); // 💣
+        let config = Config::new().unwrap();
         let config = Rc::new(config);
 
-        let mut fs = FetchService::new();
-
-        let fetch_task = fs
-            .fetch::<Nothing, Json<Result<Vec<File>, Error>>>(
-                Request::get(config.list_endpoint(&state.path, ""))
-                    .body(Nothing)
-                    .expect(&config.list_endpoint(&state.path, "")),
-                link.callback(|response: Response<Json<Result<Vec<File>, Error>>>| {
-                    let (meta, Json(data)) = response.into_parts();
-                    if meta.status.is_success() {
-                        return VywrsMessage::UpdateListing(data.unwrap());
-                    }
-                    VywrsMessage::FetchFailed
-                }),
-            )
-            .unwrap();
-
-        Vywrs {
+        let fs = FetchService::new();
+        let rs = RouteService::new();
+        let mut app = Vywrs {
             config,
             link,
             state,
             fs,
-            fetch_task,
-        }
+            fetch_task: None,
+            rs,
+        };
+
+        app.setup_routing();
+        app.update(VywrsMessage::FetchListing);
+
+        app
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -99,22 +137,15 @@ impl Component for Vywrs {
         match msg {
             VywrsMessage::ChangeMode(new_mode) => rerender_if_changed!(mode, new_mode),
             VywrsMessage::ChangeTheme(new_theme) => rerender_if_changed!(theme, new_theme),
-            VywrsMessage::UpdateListing(new_listing) => {
-                let prev = self.state.listing.clone();
-                self.state.listing = Rc::new(new_listing);
-                return prev != self.state.listing;
-            }
+            VywrsMessage::UpdateListing(new_listing) => self.do_update_listing(new_listing),
+            VywrsMessage::FetchListing => self.do_fetch_listing(),
             VywrsMessage::FetchFailed => false,
         }
     }
 
     fn view(&self) -> Html {
-        let layout_change_callback = self
-            .link
-            .callback(|mode: VywrsMode| VywrsMessage::ChangeMode(mode));
-        let theme_change_callback = self
-            .link
-            .callback(|theme: VywrsTheme| VywrsMessage::ChangeTheme(theme));
+        let layout_change_callback = self.link.callback(VywrsMessage::ChangeMode);
+        let theme_change_callback = self.link.callback(VywrsMessage::ChangeTheme);
 
         BodyClassSetter::set(&self.state.theme).unwrap();
 

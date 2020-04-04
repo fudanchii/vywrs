@@ -46,7 +46,7 @@ impl TileView {
             FileType::Directory => tile! {
                 "tiles__directory",
                 "tiles__directory-link",
-                file.location(&self.props.path),
+                config.directory_endpoint(&self.props.path, &file.name()),
             },
             FileType::File => tile! {
                 "tiles__file",
@@ -75,7 +75,7 @@ impl TileView {
     fn background_image(&self, name: &str) -> String {
         let config: &Config = self.props.config.borrow();
         format!(
-            "backgroud-image: url(\"{}\")",
+            "background-image: url(\"{}\")",
             config.thumbnailer(&self.props.path, name)
         )
     }

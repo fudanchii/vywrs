@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const distPath = path.resolve(__dirname, "dist");
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode !== 'production';
+  const features = argv.features && `-- --features ${argv.features}`;
   return {
     devServer: {
       contentBase: distPath,
@@ -23,8 +24,8 @@ module.exports = (env, argv) => {
         { from: './static', to: distPath }
       ]),
       new WasmPackPlugin({
-        crateDirectory: ".",
-        extraArgs: "--no-typescript",
+        crateDirectory: './',
+        extraArgs: `--no-typescript --release ${features || ''}`,
       }),
       new MiniCssExtractPlugin({ filename: "style.css" })
     ],

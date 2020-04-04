@@ -1,12 +1,15 @@
-use yew::prelude::*;
 use crate::neq_assign::NeqAssign;
-use crate::vywrs::{VywrsMessage, VywrsMode, VywrsTheme};
-
-use std::path::Path;
+use crate::vywrs::{VywrsMode, VywrsTheme};
+use yew::prelude::*;
 
 pub struct NavigationBar {
     link: ComponentLink<Self>,
     props: Props,
+}
+
+pub enum Message {
+    ChangeMode(VywrsMode),
+    ChangeTheme(VywrsTheme),
 }
 
 #[derive(Clone, Properties, PartialEq)]
@@ -23,7 +26,7 @@ impl NavigationBar {
         html! {
             <>
                 <span>{"/"}</span>
-                <a href=&*path>
+                <a href=format!("#/{}", path)>
                     { path.split('/').rev().take(1).collect::<Vec<&str>>()[0] }
                 </a>
             </>
@@ -31,17 +34,27 @@ impl NavigationBar {
     }
 
     fn directories(path: &str) -> Vec<String> {
-        path
-            .split('/')
-            .filter(|s| s != &"")
-            .map(|fragment| fragment.to_string())
+        let fragments: Vec<&str> = path.split('/').filter(|&s| s != "").collect();
+
+        fragments
+            .iter()
+            .enumerate()
+            .map(|(idx, &fragment)| {
+                fragments
+                    .iter()
+                    .take(idx)
+                    .chain(&[fragment])
+                    .map(|pfrag| (*pfrag).to_string())
+                    .collect::<Vec<_>>()
+            })
+            .map(|path| path.join("/"))
             .collect()
     }
 }
 
 impl Component for NavigationBar {
     type Properties = Props;
-    type Message = VywrsMessage;
+    type Message = Message;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         NavigationBar { link, props }
@@ -49,13 +62,11 @@ impl Component for NavigationBar {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            VywrsMessage::ChangeMode(mode) => self.props.layout_changer.emit(mode),
-            VywrsMessage::ChangeTheme(theme) => {
+            Message::ChangeMode(mode) => self.props.layout_changer.emit(mode),
+            Message::ChangeTheme(theme) => {
                 self.props.theme_changer.emit(theme);
                 return theme != self.props.theme;
             }
-            VywrsMessage::UpdateListing(_) => {}
-            VywrsMessage::FetchFailed => {}
         }
 
         false
@@ -66,30 +77,42 @@ impl Component for NavigationBar {
     }
 
     fn view(&self) -> Html {
-        let back_href = Path::new(&self.props.path)
-            .parent()
-            .map(|dirname| dirname.to_string_lossy().to_string())
-            .unwrap_or("#/".to_string());
+        let fragments: Vec<String> = self
+            .props
+            .path
+            .split_terminator('/')
+            .map(|fragment| fragment.to_string())
+            .collect::<Vec<_>>();
 
-        let into_thumbnail = self
-            .link
-            .callback(|_| VywrsMessage::ChangeMode(VywrsMode::Tile));
-        let into_list = self
-            .link
-            .callback(|_| VywrsMessage::ChangeMode(VywrsMode::List));
+        let back_href = format!(
+            "#{}",
+            fragments
+                .iter()
+                .take(if fragments.iter().count() > 0 {
+                    fragments.iter().count() - 1
+                } else {
+                    0
+                })
+                .map(|fragment| fragment.to_string())
+                .collect::<Vec<String>>()
+                .join("/")
+        );
+
+        let into_thumbnail = self.link.callback(|_| Message::ChangeMode(VywrsMode::Tile));
+        let into_list = self.link.callback(|_| Message::ChangeMode(VywrsMode::List));
         let use_dark_theme = self
             .link
-            .callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Dark));
+            .callback(|_| Message::ChangeTheme(VywrsTheme::Dark));
         let use_light_theme = self
             .link
-            .callback(|_| VywrsMessage::ChangeTheme(VywrsTheme::Light));
+            .callback(|_| Message::ChangeTheme(VywrsTheme::Light));
 
         html! {
             <div class=vec!["navbar", &self.props.theme]>
                 <a class="navbar__logo" href="https://github.com/fudanchii/vywrs" />
                 <a class="navbar__back" href=back_href />
                 <div class="navbar__location" title=self.props.path>
-                    <a class="navbar__location-home" href="#/" />
+                    <a class="navbar__location-home" href="#" />
                     { for Self::directories(&self.props.path).iter().map(Self::directory_link) }
                 </div>
                 <div class="navbar__menu">

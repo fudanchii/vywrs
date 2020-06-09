@@ -3,14 +3,9 @@ Vywrs
 
 Vywrs is a complete rewrite of [vyw](https://github.com/fudanchii/vyw), a files and images browser which only need nginx as backend.
 
-Vywrs written in rust, and supposed to be compiled into wasm format, this is possible thanks to great projects as: yew, stdweb, and cargo-web, to name a few.
+Vywrs is written in rust, and supposed to be compiled into wasm format, this is possible thanks to [yew](https://yew.rs).
 
-Vywrs config is identical to vyw, in addition vywrs now has list view mode in addition to thumbnail view.
-
-demo site
----
-
-https://vywrs.fudan.ch
+Vywrs config is identical to vyw, in addition vywrs now has list view mode to complement thumbnail view.
 
 how to build
 ---

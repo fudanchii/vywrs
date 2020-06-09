@@ -125,6 +125,10 @@ impl Component for Vywrs {
         app
     }
 
+    fn change(&mut self, _: Self::Properties) -> ShouldRender {
+        false
+    }
+
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         macro_rules! rerender_if_changed {
             ($a:ident, $b:expr) => {{

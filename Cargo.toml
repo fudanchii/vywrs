@@ -8,7 +8,7 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-yew = { version = "0.14", features = ["web_sys"] }
+yew = { version = "0.16" }
 web-sys = "0.3"
 js-sys = "0.3"
 wasm-bindgen = "0.2"
@@ -19,6 +19,6 @@ anyhow = "1"
 wee_alloc = { version = "0.4", optional = true }
 
 [dependencies.yew-router]
-version = "0.11"
+version = "0.13"
 default-features = false
 features = ["web_sys", "service"]

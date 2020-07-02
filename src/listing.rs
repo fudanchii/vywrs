@@ -49,6 +49,6 @@ impl File {
     where
         T: PartialEq<str> + ?Sized,
     {
-        vec!["jpg", "jpeg", "png"].iter().any(|&iex| ext.eq(iex))
+        vec!["JPG", "JPEG", "PNG", "jpg", "jpeg", "png"].iter().any(|&iex| ext.eq(iex))
     }
 }

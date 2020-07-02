@@ -15,7 +15,6 @@ pub struct Vywrs {
     link: ComponentLink<Self>,
     state: State,
     config: Rc<Config>,
-    fs: FetchService,
     fetch_task: Option<FetchTask>,
     rs: RouteService<()>,
 }
@@ -57,7 +56,7 @@ impl Vywrs {
 
     fn fetch_listing(&mut self, endpoint: &str) -> Result<(), Error> {
         self.fetch_task = Some(
-            self.fs.fetch::<Nothing, Json<Result<Vec<File>, Error>>>(
+            FetchService::fetch::<Nothing, Json<Result<Vec<File>, Error>>>(
                 Request::get(endpoint).body(Nothing).expect(endpoint),
                 self.link
                     .callback(|response: Response<Json<Result<Vec<File>, Error>>>| {
@@ -108,13 +107,11 @@ impl Component for Vywrs {
         let config = Config::new().unwrap();
         let config = Rc::new(config);
 
-        let fs = FetchService::new();
         let rs = RouteService::new();
         let mut app = Vywrs {
             config,
             link,
             state,
-            fs,
             fetch_task: None,
             rs,
         };

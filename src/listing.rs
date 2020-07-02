@@ -1,6 +1,9 @@
 use bytesize::ByteSize;
 use serde::Deserialize;
+use std::ffi::OsStr;
 use std::path::Path;
+
+use crate::services::Config;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub struct File {
@@ -33,22 +36,21 @@ impl File {
         self.mtime.clone()
     }
 
-    pub fn file_type(&self) -> FileType {
+    pub fn file_type(&self, cfg: &Config) -> FileType {
         if self._type == "directory" {
             return FileType::Directory;
         }
 
         let file = Path::new(&self.name);
         match file.extension() {
-            Some(ext) if File::is_image(ext) => FileType::Image,
+            Some(ext) if File::is_image(ext, cfg.supported_image_type()) => FileType::Image,
             _ => FileType::File,
         }
     }
 
-    fn is_image<T>(ext: &T) -> bool
-    where
-        T: PartialEq<str> + ?Sized,
-    {
-        vec!["JPG", "JPEG", "PNG", "jpg", "jpeg", "png"].iter().any(|&iex| ext.eq(iex))
+    fn is_image(ext: &OsStr, supported: &Vec<String>) -> bool {
+        supported
+            .iter()
+            .any(|iex| ext.to_string_lossy().as_ref().to_lowercase().eq(iex))
     }
 }

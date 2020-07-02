@@ -15,7 +15,7 @@ $highlight-1-rgba-05: rgba(243,222,138,0.5);
 $highlight-2: #eb9486;
 
 body {
-    font-family: Consolas, Monaco, "Roboto Mono";
+    font-family: "Roboto Mono";
 }
 
 body.dark {
@@ -65,6 +65,14 @@ a {
     .tiles__label {
         transition: color 300ms;
         color: rgba(0, 0, 0, 0);
+    }
+}
+
+@media only screen and (max-width: 392px) {
+    .tiles__directory,.tiles__file,.tiles__image {
+        width: 50vw;
+        height: 50vw;
+        max-width: 50vw;
     }
 }
 

@@ -55,19 +55,20 @@ impl Vywrs {
     }
 
     fn fetch_listing(&mut self, endpoint: &str) -> Result<(), Error> {
-        self.fetch_task = Some(
-            FetchService::fetch::<Nothing, Json<Result<Vec<File>, Error>>>(
-                Request::get(endpoint).body(Nothing).expect(endpoint),
-                self.link
-                    .callback(|response: Response<Json<Result<Vec<File>, Error>>>| {
-                        let (meta, Json(data)) = response.into_parts();
-                        if meta.status.is_success() {
-                            return VywrsMessage::UpdateListing(data.unwrap());
-                        }
-                        VywrsMessage::FetchFailed
-                    }),
-            )?,
-        );
+        self.fetch_task = Some(FetchService::fetch::<
+            Nothing,
+            Json<Result<Vec<File>, Error>>,
+        >(
+            Request::get(endpoint).body(Nothing).expect(endpoint),
+            self.link
+                .callback(|response: Response<Json<Result<Vec<File>, Error>>>| {
+                    let (meta, Json(data)) = response.into_parts();
+                    if meta.status.is_success() {
+                        return VywrsMessage::UpdateListing(data.unwrap());
+                    }
+                    VywrsMessage::FetchFailed
+                }),
+        )?);
         Ok(())
     }
 

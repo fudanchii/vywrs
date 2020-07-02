@@ -97,4 +97,8 @@ impl Config {
         path.push_str(name);
         Config::url_encode(&self.thumbnailer.replace("/<PATHNAME>", path!(path)))
     }
+
+    pub fn supported_image_type(&self) -> &Vec<String> {
+        &self.supported_image_type
+    }
 }

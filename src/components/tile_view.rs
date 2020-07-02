@@ -42,7 +42,7 @@ impl TileView {
         }
 
         let config: &Config = self.props.config.borrow();
-        match file.file_type() {
+        match file.file_type(config) {
             FileType::Directory => tile! {
                 "tiles__directory",
                 "tiles__directory-link",
@@ -62,7 +62,8 @@ impl TileView {
     }
 
     fn thumbnail(&self, file: &File) -> Html {
-        match file.file_type() {
+        let config: &Config = self.props.config.borrow();
+        match file.file_type(config) {
             FileType::Directory => html! { <div class="icon-directory" /> },
             FileType::File => html! { <div class="icon-file" /> },
             FileType::Image => html! {

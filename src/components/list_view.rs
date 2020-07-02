@@ -43,7 +43,7 @@ impl ListView {
 
     fn location(&self, file: &File) -> String {
         let config: &Config = self.props.config.borrow();
-        match file.file_type() {
+        match file.file_type(config) {
             FileType::Directory => config.directory_endpoint(&self.props.path, &file.name()),
             _ => config.file_endpoint(&self.props.path, &file.name()),
         }

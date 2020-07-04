@@ -5,10 +5,12 @@ use crate::{
     vywrs::{VywrsMode, VywrsTheme},
 };
 use anyhow::Error;
+use std::cell::RefCell;
 use std::rc::Rc;
 use yew::format::{Json, Nothing};
 use yew::prelude::*;
 use yew::services::fetch::{FetchService, FetchTask, Request, Response};
+use yew::services::{storage::Area, StorageService};
 use yew_router::prelude::RouteService;
 
 pub struct Vywrs {
@@ -24,6 +26,7 @@ struct State {
     theme: VywrsTheme,
     mode: VywrsMode,
     listing: Rc<Vec<File>>,
+    storage: RefCell<StorageService>,
 }
 
 pub enum VywrsMessage {
@@ -98,11 +101,14 @@ impl Component for Vywrs {
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+        let storage = StorageService::new(Area::Local).unwrap();
+
         let state = State {
             path: String::from(""),
-            mode: VywrsMode::Tile,
-            theme: VywrsTheme::Dark,
+            mode: storage.restore("vywrs:mode"),
+            theme: storage.restore("vywrs:theme"),
             listing: Rc::new(vec![]),
+            storage: RefCell::new(storage),
         };
 
         let config = Config::new().unwrap();
@@ -129,16 +135,22 @@ impl Component for Vywrs {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         macro_rules! rerender_if_changed {
-            ($a:ident, $b:expr) => {{
-                let prev = self.state.$a;
-                self.state.$a = $b;
-                return prev != $b;
-            }};
+            ($a:ident, $b:ident, $c:expr) => {{
+                if self.state.$a != $b {
+                    self.state.$a = $b;
+                    self.state
+                        .storage
+                        .try_borrow_mut()
+                        .map(|mut storage| storage.store($c, Ok((&$b).to_string())))
+                        .unwrap_or(());
+                    return true;
+                }
+                false
+            }}
         }
-
         match msg {
-            VywrsMessage::ChangeMode(new_mode) => rerender_if_changed!(mode, new_mode),
-            VywrsMessage::ChangeTheme(new_theme) => rerender_if_changed!(theme, new_theme),
+            VywrsMessage::ChangeMode(new_mode) => rerender_if_changed!(mode, new_mode, "vywrs:mode"),
+            VywrsMessage::ChangeTheme(new_theme) => rerender_if_changed!(theme, new_theme, "vywrs:theme"),
             VywrsMessage::UpdateListing(new_listing) => self.do_update_listing(new_listing),
             VywrsMessage::FetchListing => self.do_fetch_listing(),
             VywrsMessage::FetchFailed => false,

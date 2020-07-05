@@ -1,7 +1,7 @@
 use crate::{
     components::{ListView, NavigationBar, TileView},
     listing::File,
-    services::{BodyClassSetter, Config},
+    services::{BodyClassSetter, Config, TitleSetter},
     vywrs::{VywrsMode, VywrsTheme},
 };
 use anyhow::Error;
@@ -162,6 +162,7 @@ impl Component for Vywrs {
         let theme_change_callback = self.link.callback(VywrsMessage::ChangeTheme);
 
         BodyClassSetter::set(&self.state.theme).unwrap();
+        TitleSetter::set(&self.state.path).unwrap();
 
         html! {
             <>

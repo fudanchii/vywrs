@@ -1,12 +1,12 @@
 use crate::{
     listing::{File, FileType},
-    neq_assign::NeqAssign,
     services::Config,
     vywrs::VywrsTheme,
 };
 use std::borrow::Borrow;
 use std::rc::Rc;
 use yew::prelude::*;
+use yewtil::NeqAssign;
 
 pub struct TileView {
     props: Props,

@@ -1,4 +1,4 @@
-use crate::neq_assign::NeqAssign;
+use yewtil::NeqAssign;
 use crate::vywrs::{VywrsMode, VywrsTheme};
 use yew::prelude::*;
 

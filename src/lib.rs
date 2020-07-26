@@ -2,7 +2,6 @@
 
 mod components;
 mod listing;
-mod neq_assign;
 mod services;
 mod vywrs;
 

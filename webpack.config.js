@@ -20,9 +20,11 @@ module.exports = (env, argv) => {
       webassemblyModuleFilename: "vywrs.wasm"
     },
     plugins: [
-      new CopyWebpackPlugin([
-        { from: './static', to: distPath }
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+            { from: './static', to: distPath }
+        ]
+      }),
       new WasmPackPlugin({
         crateDirectory: './',
         extraArgs: `--no-typescript ${features || ''}`,

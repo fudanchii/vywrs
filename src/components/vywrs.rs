@@ -146,11 +146,15 @@ impl Component for Vywrs {
                     return true;
                 }
                 false
-            }}
+            }};
         }
         match msg {
-            VywrsMessage::ChangeMode(new_mode) => rerender_if_changed!(mode, new_mode, "vywrs:mode"),
-            VywrsMessage::ChangeTheme(new_theme) => rerender_if_changed!(theme, new_theme, "vywrs:theme"),
+            VywrsMessage::ChangeMode(new_mode) => {
+                rerender_if_changed!(mode, new_mode, "vywrs:mode")
+            }
+            VywrsMessage::ChangeTheme(new_theme) => {
+                rerender_if_changed!(theme, new_theme, "vywrs:theme")
+            }
             VywrsMessage::UpdateListing(new_listing) => self.do_update_listing(new_listing),
             VywrsMessage::FetchListing => self.do_fetch_listing(),
             VywrsMessage::FetchFailed => false,

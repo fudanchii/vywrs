@@ -1,6 +1,6 @@
-use yewtil::NeqAssign;
 use crate::vywrs::{VywrsMode, VywrsTheme};
 use yew::prelude::*;
+use yewtil::NeqAssign;
 
 pub struct NavigationBar {
     link: ComponentLink<Self>,

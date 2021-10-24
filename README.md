@@ -10,11 +10,11 @@ Vywrs config is identical to vyw, in addition vywrs now has list view mode to co
 how to build
 ---
 
-- ensure you have node, npm, rustup and stable Rust instalation (> 1.39) 
-- install wasm32-unknown-unknown build target with rustup
-- Install npm dependencies with npm.
-- run `npm run start:dev` to start development server. Server will listen at localhost:8000
-- run `npm run build` to build.
+- Ensure you have rustup and stable Rust instalation (> 1.39) 
+- Install wasm32-unknown-unknown build target with rustup
+- Follow ["Getting Started with Trunk"](https://yew.rs/getting-started/project-setup/using-trunk) in yew.rs docs.
+- Run `trunk serve` to run vywrs in development mode
+- Run `trunk build --release` and serve `dist/` folder in HTTP server to run vywrs in release mode 
 
 build result will be available under dist folder.
 

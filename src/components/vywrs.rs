@@ -1,7 +1,7 @@
 use crate::{
     components::{ListView, NavigationBar, TileView},
     listing::File,
-    services::{BodyClassSetter, Config, TitleSetter},
+    services::{BodyClassSetter, Config, TitleSetter, GLightbox},
     vywrs::{VywrsMode, VywrsTheme},
 };
 use anyhow::Error;
@@ -159,6 +159,10 @@ impl Component for Vywrs {
             VywrsMessage::FetchListing => self.do_fetch_listing(),
             VywrsMessage::FetchFailed => false,
         }
+    }
+
+    fn rendered(&mut self, _first_render: bool) {
+        GLightbox();
     }
 
     fn view(&self) -> Html {

@@ -26,7 +26,7 @@ impl TileView {
             ($tile:expr, $link:expr, $href:expr,) => {
                 html! {
                     <div class=$tile>
-                        <a class=$link href=$href>
+                        <a class=$link href=$href data-gallery="vywrs">
                             <div class="tiles__icon">
                                 { self.thumbnail(file) }
                             </div>
@@ -55,7 +55,7 @@ impl TileView {
             },
             FileType::Image => tile! {
                 "tiles__image",
-                "tiles__image-link",
+                "tiles__image-link glightbox",
                 config.file_endpoint(&self.props.path, &file.name()),
             },
         }

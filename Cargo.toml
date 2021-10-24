@@ -1,15 +1,12 @@
 [package]
 name = "vywrs"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Nurahmadie <nurahmadie@gmail.com>"]
 edition = "2021"
 
-[lib]
-crate-type = ["cdylib", "rlib"]
-
 [dependencies]
-yew = "0.17"
-yewtil = { version = "0.3", features = ["neq"] }
+yew = "0.18"
+yewtil = { version = "0.4", features = ["neq"] }
 web-sys = "0.3"
 js-sys = "0.3"
 wasm-bindgen = "0.2"
@@ -18,8 +15,4 @@ serde_json = "1"
 bytesize = "1"
 anyhow = "1"
 wee_alloc = { version = "0.4", optional = true }
-
-[dependencies.yew-router]
-version = "0.14"
-default-features = false
-features = ["web_sys", "service"]
+yew-router = "0.15"

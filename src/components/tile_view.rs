@@ -101,7 +101,7 @@ impl Component for TileView {
     fn view(&self) -> Html {
         let file_listing: &Vec<File> = self.props.listing.borrow();
         html! {
-            <div class=vec!["tiles", &self.props.theme]>
+            <div class=classes!["tiles", self.props.theme]>
                 { for file_listing.iter().map(|file| self.tile_view(file)) }
             </div>
         }

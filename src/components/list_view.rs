@@ -69,7 +69,7 @@ impl Component for ListView {
     fn view(&self) -> Html {
         let file_listing: &Vec<File> = self.props.listing.borrow();
         html! {
-            <div class=vec!["rows", &self.props.theme]>
+            <div class=classes!("rows", self.props.theme)>
                 { for file_listing.iter().map(|file| self.row_view(file)) }
             </div>
         }

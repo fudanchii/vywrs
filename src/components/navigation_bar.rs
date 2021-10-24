@@ -58,7 +58,7 @@ impl NavigationBar {
         html! {
             <div class="navbar__menu">
                 <a class="navbar__menu--icon" />
-                <div class=vec!["navbar__menu--content", &self.props.theme]>
+                <div class=classes!["navbar__menu--content", self.props.theme]>
                     <div class="navbar__menu--viewmode">
                         {"view: "}
                         <a class="navbar__menu--viewmode--thumbnail" onclick=into_thumbnail />
@@ -115,10 +115,10 @@ impl Component for NavigationBar {
         };
 
         html! {
-            <div class=vec!["navbar", &self.props.theme]>
+            <div class=classes!["navbar", self.props.theme]>
                 <a class="navbar__logo" href="https://github.com/fudanchii/vywrs" />
-                <a class="navbar__back" href=back_href />
-                <div class="navbar__location" title=&self.props.path>
+                <a class="navbar__back" href=back_href.to_string() />
+                <div class="navbar__location" title=self.props.path.clone()>
                     <a class="navbar__location-home" href="#" />
                     { for Self::directories(&self.props.path).iter().map(Self::directory_link) }
                 </div>

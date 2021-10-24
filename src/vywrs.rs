@@ -1,8 +1,4 @@
-#[derive(Copy, Clone, PartialEq)]
-pub enum VywrsMode {
-    List,
-    Tile,
-}
+use yew::{classes, Classes};
 
 #[derive(Copy, Clone, PartialEq)]
 pub enum VywrsTheme {
@@ -21,6 +17,21 @@ impl std::ops::Deref for VywrsTheme {
     }
 }
 
+impl From<VywrsTheme> for Classes {
+    fn from(item: VywrsTheme) -> Self {
+        match item {
+            VywrsTheme::Dark => classes!("dark"),
+            VywrsTheme::Light => classes!("light"),
+        }
+    }
+}
+
+#[derive(Copy, Clone, PartialEq)]
+pub enum VywrsMode {
+    List,
+    Tile,
+}
+
 impl std::ops::Deref for VywrsMode {
     type Target = str;
 
@@ -28,6 +39,15 @@ impl std::ops::Deref for VywrsMode {
         match self {
             VywrsMode::Tile => "tile",
             VywrsMode::List => "list",
+        }
+    }
+}
+
+impl From<VywrsMode> for Classes {
+    fn from(item: VywrsMode) -> Self {
+        match item {
+            VywrsMode::Tile => classes!("tile"),
+            VywrsMode::List => classes!("list"),
         }
     }
 }

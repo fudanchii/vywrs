@@ -1,7 +1,7 @@
 mod body_class_setter;
 mod config;
 mod title_setter;
-mod glightbox;
+pub mod glightbox;
 
 pub use body_class_setter::BodyClassSetter;
 pub use config::Config;

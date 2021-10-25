@@ -1,7 +1,7 @@
 use crate::{
     components::{ListView, NavigationBar, TileView},
     listing::File,
-    services::{BodyClassSetter, Config, TitleSetter, GLightbox},
+    services::{BodyClassSetter, Config, TitleSetter, glightbox, GLightbox},
     vywrs::{VywrsMode, VywrsTheme},
 };
 use anyhow::Error;
@@ -27,6 +27,7 @@ struct State {
     mode: VywrsMode,
     listing: Rc<Vec<File>>,
     storage: RefCell<StorageService>,
+    lightbox: Option<glightbox::Instance>,
 }
 
 pub enum VywrsMessage {
@@ -109,6 +110,7 @@ impl Component for Vywrs {
             theme: storage.restore("vywrs:theme"),
             listing: Rc::new(vec![]),
             storage: RefCell::new(storage),
+            lightbox: None,
         };
 
         let config = Config::new().unwrap();
@@ -162,7 +164,10 @@ impl Component for Vywrs {
     }
 
     fn rendered(&mut self, _first_render: bool) {
-        GLightbox();
+        if let Some(lb) = self.state.lightbox.take() {
+            lb.destroy();
+        }
+        self.state.lightbox.replace(GLightbox());
     }
 
     fn view(&self) -> Html {

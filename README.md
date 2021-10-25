@@ -48,3 +48,9 @@ The above configuration may be used as the following:
 ```
 http://localhost/index.json?p=<PATHNAME>
 ```
+
+
+3rd party libraries
+---
+
+This app invoke and re-bind some methods from [GLightbox](https://github.com/biati-digital/glightbox), which licensed under [MIT](https://github.com/biati-digital/glightbox/blob/master/license.md).

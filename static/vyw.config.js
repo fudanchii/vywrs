@@ -35,5 +35,5 @@ window.vyw = {
   /**
    * Image type supported by thumbnailer.
    */,
-  supportedImageType: ['jpg', 'jpeg', 'gif', 'png']
+  supportedImageType: ['jpg', 'jpeg', 'gif', 'png', 'webp']
 };

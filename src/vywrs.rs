@@ -1,7 +1,8 @@
 use yew::{classes, Classes};
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Default, PartialEq)]
 pub enum VywrsTheme {
+    #[default]
     Dark,
     Light,
 }
@@ -26,9 +27,10 @@ impl From<VywrsTheme> for Classes {
     }
 }
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Default, PartialEq)]
 pub enum VywrsMode {
     List,
+    #[default]
     Tile,
 }
 

@@ -11,7 +11,7 @@ macro_rules! path {
     };
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Config {
     list_endpoint: String,
     file_endpoint: String,
@@ -73,29 +73,33 @@ impl Config {
     }
 
     pub fn list_endpoint(&self, path: &str) -> String {
-        Config::url_encode(&self.list_endpoint.replace("/<PATHNAME>", path!(path)))
+        Config::url_encode(&self.list_endpoint.replace("/<PATHNAME>", path))
     }
 
     pub fn directory_endpoint(&self, path: &str, name: &str) -> String {
         let mut endpoint = String::from("#");
         endpoint.push_str(path);
-        endpoint.push('/');
+        if path != "/" {
+            endpoint.push('/');
+        }
         endpoint.push_str(name);
         endpoint
     }
 
     pub fn file_endpoint(&self, path: &str, name: &str) -> String {
         let mut path = String::from(path);
-        path.push('/');
+        if path != "/" {
+            path.push('/');
+        }
         path.push_str(name);
-        Config::url_encode(&self.file_endpoint.replace("/<PATHNAME>", path!(path)))
+        Config::url_encode(&self.file_endpoint.replace("/<PATHNAME>", &path))
     }
 
     pub fn thumbnailer(&self, path: &str, name: &str) -> String {
         let mut path = String::from(path);
         path.push('/');
         path.push_str(name);
-        Config::url_encode(&self.thumbnailer.replace("/<PATHNAME>", path!(path)))
+        Config::url_encode(&self.thumbnailer.replace("/<PATHNAME>", &path))
     }
 
     pub fn supported_image_type(&self) -> &Vec<String> {

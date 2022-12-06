@@ -3,11 +3,8 @@ mod listing;
 mod services;
 mod vywrs;
 
-use components::Vywrs;
-
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+use components::VywrsRoute;
 
 pub fn main() {
-    yew::start_app::<Vywrs>();
+    yew::Renderer::<VywrsRoute>::new().render();
 }

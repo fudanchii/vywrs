@@ -6,11 +6,8 @@ use crate::{
 use std::borrow::Borrow;
 use std::rc::Rc;
 use yew::prelude::*;
-use yewtil::NeqAssign;
 
-pub struct ListView {
-    props: Props,
-}
+pub struct ListView;
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
@@ -21,18 +18,18 @@ pub struct Props {
 }
 
 impl ListView {
-    fn row_view(&self, file: &File) -> Html {
+    fn row_view(&self, ctx: &Context<Self>, file: &File) -> Html {
         html! {
             <div class="rows__item">
-                <a href=self.location(file) title=file.name()>
+                <a href={self.location(ctx, file)} title={file.name()}>
                     <div class="rows__item-filename">
                         { file.name() }
                     </div>
                     <div class="rows__item-meta">
-                        <div class="rows__item-filesize" title=file.size()>
+                        <div class="rows__item-filesize" title={file.size()}>
                             { file.size() }
                         </div>
-                        <div class="rows__item-filedate" title=file.mtime()>
+                        <div class="rows__item-filedate" title={file.mtime()}>
                             { file.mtime() }
                         </div>
                     </div>
@@ -41,11 +38,11 @@ impl ListView {
         }
     }
 
-    fn location(&self, file: &File) -> String {
-        let config: &Config = self.props.config.borrow();
+    fn location(&self, ctx: &Context<Self>, file: &File) -> String {
+        let config: &Config = ctx.props().config.borrow();
         match file.file_type(config) {
-            FileType::Directory => config.directory_endpoint(&self.props.path, &file.name()),
-            _ => config.file_endpoint(&self.props.path, &file.name()),
+            FileType::Directory => config.directory_endpoint(&ctx.props().path, &file.name()),
+            _ => config.file_endpoint(&ctx.props().path, &file.name()),
         }
     }
 }
@@ -54,23 +51,19 @@ impl Component for ListView {
     type Properties = Props;
     type Message = ();
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        ListView { props }
+    fn create(_ctx: &Context<Self>) -> Self {
+        ListView {}
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: &Context<Self>, _: Self::Message) -> bool {
         true
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
-    }
-
-    fn view(&self) -> Html {
-        let file_listing: &Vec<File> = self.props.listing.borrow();
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let file_listing: &Vec<File> = ctx.props().listing.borrow();
         html! {
-            <div class=classes!("rows", self.props.theme)>
-                { for file_listing.iter().map(|file| self.row_view(file)) }
+            <div class={classes!("rows", ctx.props().theme)}>
+                { for file_listing.iter().map(|file| self.row_view(ctx, file)) }
             </div>
         }
     }

@@ -1,16 +1,6 @@
 use js_sys::{Array, JsString, Object, Reflect};
 use web_sys::window;
 
-macro_rules! path {
-    ($p:ident) => {
-        if $p == "" {
-            "/"
-        } else {
-            &$p
-        }
-    };
-}
-
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Config {
     list_endpoint: String,

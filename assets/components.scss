@@ -241,4 +241,16 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
+
+    .directory::before {
+        content: "📁 ";
+    }
+
+    .file::before {
+        content: "📃 ";
+    }
+
+    .image::before {
+        content: "🖼️ ";
+    }
 }

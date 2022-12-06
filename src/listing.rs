@@ -21,6 +21,16 @@ pub enum FileType {
     File,
 }
 
+impl From<FileType> for String {
+    fn from(ft: FileType) -> Self {
+        match ft {
+            FileType::Directory => "directory".to_string(),
+            FileType::Image => "image".to_string(),
+            FileType::File => "file".to_string(),
+        }
+    }
+}
+
 impl File {
     pub fn name(&self) -> String {
         js_sys::decode_uri_component(&self.name)

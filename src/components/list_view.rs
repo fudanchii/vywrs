@@ -13,7 +13,7 @@ pub struct ListView;
 pub struct Props {
     pub listing: Rc<Vec<File>>,
     pub theme: VywrsTheme,
-    pub path: String,
+    pub path: AttrValue,
     pub config: Rc<Config>,
 }
 

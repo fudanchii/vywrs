@@ -10,7 +10,7 @@ pub enum Message {
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
-    pub path: String,
+    pub path: AttrValue,
     pub theme: VywrsTheme,
     pub layout_changer: Callback<VywrsMode>,
     pub theme_changer: Callback<VywrsTheme>,

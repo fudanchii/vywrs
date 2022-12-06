@@ -12,7 +12,7 @@ use yew::prelude::*;
 #[derive(Default)]
 pub struct Vywrs {
     config: Rc<Config>,
-    path: String,
+    path: AttrValue,
     theme: VywrsTheme,
     mode: VywrsMode,
     listing: Rc<Vec<File>>,
@@ -21,7 +21,7 @@ pub struct Vywrs {
 
 #[derive(Default, PartialEq, Properties)]
 pub struct VywrsProps {
-    pub location: String,
+    pub location: AttrValue,
 }
 
 pub enum VywrsMessage {
@@ -67,7 +67,7 @@ impl Vywrs {
             VywrsMessage::UpdateListing(listing)
         });
 
-        self.path = hashloc;
+        self.path = hashloc.into();
         false
     }
 
@@ -134,7 +134,8 @@ impl Component for Vywrs {
         let layout_change_callback = link.callback(VywrsMessage::ChangeMode);
         let theme_change_callback = link.callback(VywrsMessage::ChangeTheme);
 
-        if Config::url_decode(&ctx.props().location) != self.path {
+        let location = AttrValue::from(Config::url_decode(&ctx.props().location));
+        if location != self.path {
             link.send_message(VywrsMessage::FetchListing);
         }
 

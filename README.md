@@ -12,7 +12,7 @@ how to build
 
 - Ensure you have rustup and stable Rust instalation (> 1.39) 
 - Install wasm32-unknown-unknown build target with rustup
-- Follow ["Getting Started with Trunk"](https://yew.rs/docs/getting-started/project-setup/using-trunk) in yew.rs docs.
+- Follow ["Getting Started with Trunk"](https://trunkrs.dev/).
 - Run `trunk serve` to run vywrs in development mode
 - Run `trunk build --release` and serve `dist/` folder in HTTP server to run vywrs in release mode 
 

@@ -57,14 +57,23 @@ impl Vywrs {
         let endpoint = self.config.list_endpoint(&hashloc);
 
         ctx.link().send_future(async move {
-            let listing = Request::get(&endpoint)
+            let response = Request::get(&endpoint)
                 .send()
-                .await
-                .unwrap()
+                .await;
+
+            if response.is_err() {
+                return VywrsMessage::FetchFailed;
+            }
+
+            let listing = response.unwrap()
                 .json::<Vec<File>>()
-                .await
-                .unwrap();
-            VywrsMessage::UpdateListing(listing)
+                .await;
+
+            if listing.is_err() {
+                return VywrsMessage::FetchFailed;
+            }
+
+            VywrsMessage::UpdateListing(listing.unwrap())
         });
 
         self.path = hashloc.into();

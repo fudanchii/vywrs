@@ -5,6 +5,8 @@ use std::path::Path;
 
 use crate::services::Config;
 
+use yew::{classes, Classes};
+
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub struct File {
     name: String,
@@ -21,12 +23,12 @@ pub enum FileType {
     File,
 }
 
-impl From<FileType> for String {
+impl From<FileType> for Classes {
     fn from(ft: FileType) -> Self {
         match ft {
-            FileType::Directory => "directory".to_string(),
-            FileType::Image => "image".to_string(),
-            FileType::File => "file".to_string(),
+            FileType::Directory => classes!("directory"),
+            FileType::Image => classes!("image"),
+            FileType::File => classes!("file"),
         }
     }
 }

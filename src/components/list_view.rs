@@ -17,11 +17,10 @@ pub struct Props {
 
 fn row_view(props: &Props, file: &File) -> Html {
     let ft = file.file_type(props.config.borrow());
-    let ftstr: String = ft.into();
     html! {
         <div class="rows__item">
             <a href={location(props, file)} title={file.name()}>
-                <div class={classes!["rows__item-filename", ftstr]}>
+                <div class={classes!["rows__item-filename", ft]}>
                     { file.name() }
                 </div>
                 <div class="rows__item-meta">

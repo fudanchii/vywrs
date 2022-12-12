@@ -1,6 +1,6 @@
 [package]
 name = "vywrs"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Nurahmadie <nurahmadie@gmail.com>"]
 edition = "2021"
 

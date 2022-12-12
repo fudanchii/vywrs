@@ -4,6 +4,7 @@ use yew_router::prelude::*;
 
 use crate::components::Vywrs;
 use crate::components::VywrsWithFileListing;
+use crate::services::Config;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
@@ -16,7 +17,7 @@ enum Route {
 fn switch(routes: Route) -> Html {
     let path = match routes {
         Route::Root => "/".to_string(),
-        Route::WildCard { path } => format!("/{}", path),
+        Route::WildCard { path } => format!("/{}", Config::url_decode(&path)),
     };
 
     let fallback =

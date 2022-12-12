@@ -1,12 +1,13 @@
 use crate::{
     components::{ListView, NavigationBar, TileView},
     listing::File,
-    services::{glightbox, BodyClassSetter, Config, GLightbox, TitleSetter},
+    services::{glightbox, Config, GLightbox},
     vywrs::{VywrsMode, VywrsTheme},
 };
 
 use std::rc::Rc;
 use yew::prelude::*;
+use gloo_utils::{body, document};
 
 #[derive(Default)]
 pub struct Vywrs {
@@ -99,8 +100,8 @@ impl Component for Vywrs {
         let layout_change_callback = link.callback(VywrsMessage::ChangeMode);
         let theme_change_callback = link.callback(VywrsMessage::ChangeTheme);
 
-        BodyClassSetter::set(&self.theme).unwrap();
-        TitleSetter::set(&ctx.props().location).unwrap();
+        body().set_class_name(&self.theme);
+        document().set_title(&ctx.props().location);
 
         html! {
             <>

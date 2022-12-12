@@ -1,5 +1,5 @@
 use js_sys::{Array, JsString, Object, Reflect};
-use web_sys::window;
+use gloo_utils::window;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Config {
@@ -13,7 +13,6 @@ pub struct Config {
 impl Config {
     pub fn new() -> Result<Config, &'static str> {
         let vyw = window()
-            .ok_or("Cannot invoke window")?
             .get("vyw")
             .ok_or("Cannot invoke vyw object")?;
 

@@ -10,6 +10,8 @@ pub enum Message {
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
+    #[prop_or_default]
+    pub is_fetching: bool,
     pub path: AttrValue,
     pub theme: VywrsTheme,
     pub layout_changer: Callback<VywrsMode>,
@@ -93,22 +95,21 @@ impl Component for NavigationBar {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let last_slash = ctx.props().path.rfind('/').map(|pos| pos + 1).unwrap_or(0);
+        let mut last_slash = ctx.props().path.rfind('/').map(|pos| pos + 1).unwrap_or(0);
+        if last_slash == 1 {
+            last_slash = 2;
+        }
 
         let mut path = String::from("#");
         path.push_str(&ctx.props().path);
-        let back_href = if path == "#/" {
-            &path
-        } else {
-            path.get(0..last_slash).unwrap_or("#/")
-        };
+        let back_href = path.get(0..last_slash).unwrap_or("#/").to_string();
 
         html! {
             <div class={classes!["navbar", ctx.props().theme]}>
                 <a class="navbar__logo" href="https://github.com/fudanchii/vywrs" />
-                <a class="navbar__back" href={back_href.to_string()} />
+                <a class="navbar__back" href={back_href} />
                 <div class="navbar__location" title={ctx.props().path.clone()}>
-                    <a class="navbar__location-home" href="#/" />
+                    <a class={format!("navbar__location-home__fetching--{}", ctx.props().is_fetching)} href="#/" />
                     { for Self::directories(&ctx.props().path).iter().map(Self::directory_link) }
                 </div>
                 { self.menu(ctx) }

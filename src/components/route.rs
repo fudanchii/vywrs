@@ -1,7 +1,9 @@
+use std::rc::Rc;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::components::Vywrs;
+use crate::components::VywrsWithFileListing;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
@@ -17,8 +19,13 @@ fn switch(routes: Route) -> Html {
         Route::WildCard { path } => format!("/{}", path),
     };
 
+    let fallback =
+        html! {<Vywrs location={path.clone()} listing={Rc::new(vec![])} is_fetching={true} />};
+
     html! {
-        <Vywrs location={path} />
+        <Suspense {fallback}>
+            <VywrsWithFileListing location={path} />
+        </Suspense>
     }
 }
 

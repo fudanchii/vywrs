@@ -170,8 +170,13 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    &-home:before {
-        content: "\01F408[root]";
+    &-home {
+        &__fetching--false:before {
+            content: "🔖[root]";
+        }
+        &__fetching--true:before {
+            content: "⏳[root]";
+        }
     }
 }
 

@@ -5,85 +5,48 @@ use crate::{
     vywrs::{VywrsMode, VywrsTheme},
 };
 
-use gloo_net::http::Request;
 use std::rc::Rc;
 use yew::prelude::*;
 
 #[derive(Default)]
 pub struct Vywrs {
     config: Rc<Config>,
-    path: AttrValue,
     theme: VywrsTheme,
     mode: VywrsMode,
-    listing: Rc<Vec<File>>,
     lightbox: Option<glightbox::Instance>,
 }
 
 #[derive(Default, PartialEq, Properties)]
 pub struct VywrsProps {
     pub location: AttrValue,
+    pub listing: Rc<Vec<File>>,
+    #[prop_or_default]
+    pub is_fetching: bool,
 }
 
 pub enum VywrsMessage {
     ChangeMode(VywrsMode),
     ChangeTheme(VywrsTheme),
-    UpdateListing(Vec<File>),
-    FetchListing,
-    FetchFailed,
 }
 
 impl Vywrs {
-    fn main_view(&self) -> Html {
+    fn main_view(&self, ctx: &Context<Self>) -> Html {
         match self.mode {
             VywrsMode::List => html! {
                 <ListView
                     theme={self.theme}
-                    listing={self.listing.clone()}
-                    path={self.path.clone()}
+                    listing={ctx.props().listing.clone()}
+                    path={ctx.props().location.clone()}
                     config={self.config.clone()} />
             },
             VywrsMode::Tile => html! {
                 <TileView
                     theme={self.theme}
-                    listing={self.listing.clone()}
-                    path={self.path.clone()}
+                    listing={ctx.props().listing.clone()}
+                    path={ctx.props().location.clone()}
                     config={self.config.clone()} />
             },
         }
-    }
-
-    fn do_fetch_listing(&mut self, ctx: &Context<Self>) -> bool {
-        let hashloc = Config::url_decode(&ctx.props().location);
-        let endpoint = self.config.list_endpoint(&hashloc);
-
-        ctx.link().send_future(async move {
-            let response = Request::get(&endpoint)
-                .send()
-                .await;
-
-            if response.is_err() {
-                return VywrsMessage::FetchFailed;
-            }
-
-            let listing = response.unwrap()
-                .json::<Vec<File>>()
-                .await;
-
-            if listing.is_err() {
-                return VywrsMessage::FetchFailed;
-            }
-
-            VywrsMessage::UpdateListing(listing.unwrap())
-        });
-
-        self.path = hashloc.into();
-        false
-    }
-
-    fn do_update_listing(&mut self, new_listing: Vec<File>) -> bool {
-        let prev = self.listing.clone();
-        self.listing = Rc::new(new_listing);
-        prev != self.listing
     }
 }
 
@@ -91,23 +54,19 @@ impl Component for Vywrs {
     type Message = VywrsMessage;
     type Properties = VywrsProps;
 
-    fn create(ctx: &Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         let config = Config::new().unwrap();
         let app = Self {
             config: Rc::new(config),
-            path: ctx.props().location.clone(),
             mode: VywrsMode::Tile,
             theme: VywrsTheme::Dark,
-            listing: Rc::new(vec![]),
             lightbox: None,
         };
-
-        ctx.link().send_message(VywrsMessage::FetchListing);
 
         app
     }
 
-    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         macro_rules! rerender_if_changed {
             ($a:ident, $b:ident) => {{
                 if self.$a != $b {
@@ -125,9 +84,6 @@ impl Component for Vywrs {
             VywrsMessage::ChangeTheme(new_theme) => {
                 rerender_if_changed!(theme, new_theme)
             }
-            VywrsMessage::UpdateListing(new_listing) => self.do_update_listing(new_listing),
-            VywrsMessage::FetchListing => self.do_fetch_listing(ctx),
-            VywrsMessage::FetchFailed => false,
         }
     }
 
@@ -143,22 +99,18 @@ impl Component for Vywrs {
         let layout_change_callback = link.callback(VywrsMessage::ChangeMode);
         let theme_change_callback = link.callback(VywrsMessage::ChangeTheme);
 
-        let location = AttrValue::from(Config::url_decode(&ctx.props().location));
-        if location != self.path {
-            link.send_message(VywrsMessage::FetchListing);
-        }
-
         BodyClassSetter::set(&self.theme).unwrap();
-        TitleSetter::set(&self.path).unwrap();
+        TitleSetter::set(&ctx.props().location).unwrap();
 
         html! {
             <>
                 <NavigationBar
-                    path={self.path.clone()}
+                    is_fetching={ctx.props().is_fetching}
+                    path={ctx.props().location.clone()}
                     theme={self.theme}
                     layout_changer={layout_change_callback}
                     theme_changer={theme_change_callback} />
-                { self.main_view() }
+                { self.main_view(ctx) }
             </>
         }
     }

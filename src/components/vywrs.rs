@@ -1,8 +1,9 @@
 use crate::{
+    config::Config,
     components::{ListView, NavigationBar, TileView},
     listing::File,
-    services::{glightbox, Config, GLightbox},
-    vywrs::{VywrsMode, VywrsTheme},
+    ext_bindings::{glightbox, GLightbox},
+    looks::{VywrsMode, VywrsTheme},
 };
 
 use std::rc::Rc;

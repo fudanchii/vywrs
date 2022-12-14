@@ -4,7 +4,7 @@ use yew_router::prelude::*;
 
 use crate::components::Vywrs;
 use crate::components::VywrsWithFileListing;
-use crate::services::Config;
+use crate::config::Config;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {

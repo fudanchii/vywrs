@@ -1,7 +1,8 @@
+mod config;
 mod components;
 mod listing;
-mod services;
-mod vywrs;
+mod ext_bindings;
+mod looks;
 
 use components::VywrsRoute;
 

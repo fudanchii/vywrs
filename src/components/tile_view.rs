@@ -1,7 +1,7 @@
 use crate::{
+    config::Config,
     listing::{File, FileType},
-    services::Config,
-    vywrs::VywrsTheme,
+    looks::VywrsTheme,
 };
 use std::borrow::Borrow;
 use std::rc::Rc;

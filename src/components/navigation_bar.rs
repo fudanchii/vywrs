@@ -1,4 +1,4 @@
-use crate::vywrs::{VywrsMode, VywrsTheme};
+use crate::looks::{VywrsMode, VywrsTheme};
 use yew::prelude::*;
 
 pub struct NavigationBar;

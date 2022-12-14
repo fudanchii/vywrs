@@ -1,6 +1,6 @@
 use crate::components::vywrs::Vywrs;
 use crate::listing::File;
-use crate::services::Config;
+use crate::config::Config;
 use gloo_net::http::Request;
 use std::rc::Rc;
 use yew::prelude::*;

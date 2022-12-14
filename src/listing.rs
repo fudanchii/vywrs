@@ -3,7 +3,7 @@ use serde::Deserialize;
 use std::ffi::OsStr;
 use std::path::Path;
 
-use crate::services::Config;
+use crate::config::Config;
 
 use yew::{classes, Classes};
 

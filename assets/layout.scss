@@ -1,0 +1,169 @@
+$dark-1: #272838;
+$light-1: #f9f8f8;
+$light-1-rgba-08: rgba(249, 248, 248, 0.8);
+$light-1-rgb: rgba(249, 248, 248);
+$dark-2-rgba-08: rgba(32, 33, 46, 0.8);
+$dark-2-rgb: rgba(32, 33, 46);
+
+$dark-3: #343541;
+$gray-1: #7e7f9a;
+$gray-2: #f3f3f5;
+$gray-2-rgba-08: rgba(243,243,245, 0.8);
+
+$highlight-1: #f3de8a;
+$highlight-1-rgba-05: rgba(243,222,138,0.5);
+$highlight-2: #eb9486;
+
+body {
+    font-family: "Roboto Mono";
+}
+
+body.dark {
+    background: $dark-1;
+    color: $light-1;
+}
+
+body.light {
+    background: $light-1;
+    color: $dark-1;
+}
+
+a {
+    text-decoration: none;
+}
+
+.dark a {
+    color: $light-1;
+
+    &:hover {
+        color: $highlight-2;
+    }
+}
+
+.light a {
+    color: $dark-1;
+
+    &:hover {
+        color: $highlight-2;
+    }
+}
+
+.tiles {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+.tiles__directory,.tiles__file {
+    max-width: 256px;
+}
+
+.tiles__image {
+    max-width: 344px;
+
+    .tiles__label {
+        transition: color 300ms;
+        color: rgba(0, 0, 0, 0);
+    }
+}
+
+@media only screen and (max-width: 392px) {
+    .tiles__directory,.tiles__file,.tiles__image {
+        width: 50vw;
+        height: 50vw;
+        max-width: 50vw;
+    }
+}
+
+.tiles__directory,.tiles__file,.tiles__image {
+    flex: 1 1 auto;
+    width: 196px;
+    height: 196px;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        filter: contrast(120%);
+
+        .tiles__label {
+            color: #005c99;
+        }
+
+        .tiles__label-wrapper {
+            background-color: $highlight-1-rgba-05;
+        }
+
+    }
+}
+
+.tiles__label-wrapper {
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    padding: 1em;
+    box-sizing: border-box;
+    transition: background-color 300ms;
+
+    .tiles__label {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+}
+
+.tiles__icon {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    top: 0px;
+    width: 100%;
+    font-size: 1.4rem;
+    line-height: 2.8rem;
+    height: 2.8rem;
+}
+
+.navbar.dark {
+    box-shadow: 0px 5px 5px $dark-2-rgb;
+    background: $dark-2-rgba-08;
+    color: $light-1;
+}
+
+.navbar.light {
+    box-shadow: 0px 5px 5px $gray-1;
+    background: $gray-2-rgba-08;
+    color: $dark-1;
+}
+
+.rows__item {
+    &:first-child {
+        margin-top: 3rem;
+    }
+    width: 100%;
+    font-size: 1.15rem;
+
+    a {
+        display: flex;
+        width: 100%;
+    }
+
+    &:hover {
+        background-color: $highlight-1;
+        color: $dark-1;
+
+        a {
+            color: $dark-1;
+        }
+    }
+}

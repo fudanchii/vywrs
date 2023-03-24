@@ -1,0 +1,7 @@
+/dist/
+/node_modules/
+/target/
+/.sass-cache/
+/pkg/
+/static/vyw.config.local.js
+**/*.rs.bk

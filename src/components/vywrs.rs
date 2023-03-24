@@ -43,25 +43,6 @@ macro_rules! rerender_if_changed {
 }
 
 impl Vywrs {
-    fn main_view(&self, ctx: &Context<Self>) -> Html {
-        match self.mode {
-            VywrsMode::List => html! {
-                <ListView
-                    theme={self.theme}
-                    listing={ctx.props().listing.clone()}
-                    path={ctx.props().location.clone()}
-                    config={self.config.clone()} />
-            },
-            VywrsMode::Tile => html! {
-                <TileView
-                    theme={self.theme}
-                    listing={ctx.props().listing.clone()}
-                    path={ctx.props().location.clone()}
-                    config={self.config.clone()} />
-            },
-        }
-    }
-
     fn apply_lightbox(&mut self, first_render: bool) -> bool {
         // at first render, rendered->update cycle will run
         // before the DOM is rendered to the page, this is causing
@@ -136,7 +117,24 @@ impl Component for Vywrs {
                     theme={self.theme}
                     layout_changer={layout_change_callback}
                     theme_changer={theme_change_callback} />
-                { self.main_view(ctx) }
+                {
+                    match self.mode {
+                        VywrsMode::List => html! {
+                            <ListView
+                                theme={self.theme}
+                                listing={ctx.props().listing.clone()}
+                                path={ctx.props().location.clone()}
+                                config={self.config.clone()} />
+                        },
+                        VywrsMode::Tile => html! {
+                            <TileView
+                                theme={self.theme}
+                                listing={ctx.props().listing.clone()}
+                                path={ctx.props().location.clone()}
+                                config={self.config.clone()} />
+                        },
+                    }
+                }
             </>
         }
     }

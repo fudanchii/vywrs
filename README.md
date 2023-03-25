@@ -18,6 +18,18 @@ how to build
 
 build result will be available under dist folder.
 
+serve under specific directory
+---
+By default, the compiled assets are configured to be served under `/` folder. If we want to serve it under specific directory, use `--public-url` at `trunk build`, i.e.
+```
+$ trunk build --release --public-url viewer
+```
+The command above will configure assets to be served under `/viewer` directory.
+
+vywrs configuration
+---
+The default configuration is provided at `static/vywrs.config.js`, we will need to copy this file to `static/vywrs.config.local.js` before compilation or further customisation. 
+
 server configuration
 ---
 vywrs make use nginx json format for file listing, e.g.
